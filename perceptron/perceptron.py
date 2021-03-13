@@ -29,14 +29,15 @@ def train(data, target, number_of_iterations, lr=0.01):
         v = np.matmul(data,w)
         y = logsig(v)        
         #using mse loss
-        loss = np.mean(0.5 * ((target - y) ** 2))      
-        dif =  np.mean((y - target) * (y * (1.0 - y)) * np.transpose(data) , axis = 1)
+        #loss = np.mean(0.5 * ((target - y) ** 2))            
+        #dif =  np.mean((y - target) * (y * (1.0 - y)) * np.transpose(data) , axis = 1)
         #using Cross-Entropy loss        
-        #loss = - np.mean((target * np.log(y) + (1 - target) * np.log(1 - y)))
-        #dif =   np.mean( (y - target) * np.transpose(data) , axis = 1)
+        loss = - np.mean((target * np.log(y) + (1 - target) * np.log(1 - y)))
+        dif =   np.mean( (y - target) * np.transpose(data) , axis = 1)
         w = w - lr * dif
         if it % 100 == 0 :          
-            print("loss ({}): {}".format(it, loss))
+            acc = np.mean(np.equal(np.round(y), target))
+            print("loss ({}): {} acc: {}".format(it, loss, acc))
     return w
     
 def predict(data, w): 
