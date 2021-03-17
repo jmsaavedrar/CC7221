@@ -14,7 +14,7 @@ def logsig(x):
     return 1.0 / ( 1.0 + np.exp( - x ))
 
 
-def train(data, target, number_of_iterations, lr=0.01):
+def train(data, target, number_of_iterations, lr=0.01, loss_function = 'mse'):
     """
     training a simple perceptron using  the gradient descent algorithm
     """    
@@ -29,15 +29,17 @@ def train(data, target, number_of_iterations, lr=0.01):
         v = np.matmul(data,w)
         y = logsig(v)        
         #using mse loss
-        #loss = np.mean(0.5 * ((target - y) ** 2))            
-        #dif =  np.mean((y - target) * (y * (1.0 - y)) * np.transpose(data) , axis = 1)
-        #using Cross-Entropy loss        
-        loss = - np.mean((target * np.log(y) + (1 - target) * np.log(1 - y)))
-        dif =   np.mean( (y - target) * np.transpose(data) , axis = 1)
+        if (loss_function == 'mse') :
+            loss = np.mean(0.5 * ((target - y) ** 2))            
+            dif =  np.mean((y - target) * (y * (1.0 - y)) * np.transpose(data) , axis = 1)
+        #using Cross-Entropy loss
+        if (loss_function == 'ce') :        
+            loss = - np.mean((target * np.log(y) + (1 - target) * np.log(1 - y)))
+            dif =   np.mean( (y - target) * np.transpose(data) , axis = 1)
         w = w - lr * dif
-        if it % 100 == 0 :          
+        if it % 10 == 0 :          
             acc = np.mean(np.equal(np.round(y), target))
-            print("loss ({}): {} acc: {}".format(it, loss, acc))
+            print("({}) loss {} : {} acc: {}".format(it, loss_function, loss, acc))
     return w
     
 def predict(data, w): 

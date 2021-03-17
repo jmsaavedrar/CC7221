@@ -19,7 +19,8 @@ if __name__ == "__main__" :
     target = iris.target[0:100]    
     number_of_epochs = 1000
     learning_rate = 0.01
-    w = perceptron.train(data, target, number_of_epochs, learning_rate)
+    w = perceptron.train(data, target, number_of_epochs, learning_rate, 'ce')
+    print('weight : {}'.format(w))
     #drawing the final hyperplane    
     #class 0
     data_0 = data[:50,:]
